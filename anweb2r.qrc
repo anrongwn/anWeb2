@@ -1,0 +1,12 @@
+<RCC>
+    <qresource prefix="/">
+        <file>js/qwebchannel.js</file>
+        <file>js/query.js</file>
+        <file>js/withdrawal.js</file>
+        <file>page/index.html</file>
+        <file>page/query.html</file>
+        <file>page/withdrawal.html</file>
+        <file>js/mainmenu.js</file>
+        <file>js/anweb2init.js</file>
+    </qresource>
+</RCC>

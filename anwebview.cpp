@@ -1,4 +1,6 @@
 #include "anwebview.h"
+#include "anwebpage.h"
+#include "anjscommcontext.h"
 
 anWebView::anWebView(QWidget *parent) : QWebEngineView(parent)
 {
@@ -9,6 +11,25 @@ anWebView::anWebView(QWidget *parent) : QWebEngineView(parent)
 
 anWebView::~anWebView()
 {
+
+}
+
+void anWebView::init()
+{
+    QStringList jslist;
+    jslist.append(QString("mainmenu.js"));
+
+
+    QWebEngineProfile *profile = anWebPage::createWebEngineProfile(jslist);
+    anWebPage * mainpage = new anWebPage(profile, this);
+
+    anJsCommContext * context = new anJsCommContext(qobject_cast<QObject *>(mainpage));
+    mainpage->registerCommObject("context", context);
+    this->setPage(mainpage);
+
+    QString urlName("D:\\MyTest\\2019_Qt\\anWeb2\\page\\index.html");
+    QUrl url = QUrl::fromUserInput(urlName);
+    mainpage->load(url);
 
 }
 

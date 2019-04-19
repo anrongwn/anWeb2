@@ -41,6 +41,13 @@ anWebView *MainWindow::initWebView()
     pWebView_->setAttribute(Qt::WA_DeleteOnClose, true);
     pWebView_->setContextMenuPolicy(Qt::NoContextMenu);
 
+    pWebView_->init();
+
+    /*
+    QString urlName("D:\\MyTest\\2019_Qt\\anWeb2\\page\\index.html");
+    QUrl url = QUrl::fromUserInput(urlName);
+    pWebView_->load(url);
+    */
 
     pWebView_->showFullScreen();
     return pWebView_;

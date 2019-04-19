@@ -5,12 +5,15 @@
 #include <QWebEngineView>
 #include <QWebEngineSettings>
 
+
 class anWebView : public QWebEngineView
 {
     Q_OBJECT
 public:
     explicit anWebView(QWidget *parent = Q_NULLPTR);
     ~anWebView();
+
+    void init();
 
 public slots:
     void onlinkHovered(const QString &url);

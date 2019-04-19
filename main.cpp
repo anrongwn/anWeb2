@@ -6,11 +6,11 @@
 int main(int argc, char *argv[])
 {
     //QTextCodec::setCodecForLocale(QTextCodec::codecForName("GB18030"));
-    QTextCodec *systemCodec = QTextCodec::codecForLocale();
-    qDebug() << "===systemCodec.naem = " << systemCodec->name();
+    QTextCodec *localeCodec = QTextCodec::codecForLocale();
+    qDebug() << "===LocaleCodec.name = " << localeCodec->name();
 
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-    QCoreApplication::setAttribute(Qt::AA_UseDesktopOpenGL);
+    //QCoreApplication::setAttribute(Qt::AA_UseDesktopOpenGL);
 
     //初始应用对象
     QApplication a(argc, argv);
