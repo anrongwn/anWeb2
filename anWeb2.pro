@@ -27,11 +27,15 @@ CONFIG += c++11
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
-    anwebview.cpp
+    anwebview.cpp \
+    anwebpage.cpp \
+    anjscommcontext.cpp
 
 HEADERS += \
         mainwindow.h \
-    anwebview.h
+    anwebview.h \
+    anwebpage.h \
+    anjscommcontext.h
 
 FORMS += \
         mainwindow.ui

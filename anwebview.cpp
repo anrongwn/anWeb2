@@ -2,6 +2,8 @@
 
 anWebView::anWebView(QWidget *parent) : QWebEngineView(parent)
 {
+    QObject::connect(this, &QWebEngineView::loadFinished, this, &anWebView::onloadFinished);
+    QObject::connect(this, &QWebEngineView::renderProcessTerminated, this, &anWebView::onrenderProcessTerminated);
 
 }
 
@@ -23,6 +25,14 @@ void anWebView::requestLoadPage(const QUrl &url)
 void anWebView::onloadFinished(bool ok)
 {
      Q_UNUSED(ok);
+
+    qDebug() << "===" <<QTime::currentTime().toString("hh:mm:ss.zzz")<<"anWebView::onloadFinished("<<ok<<")";
+}
+
+void anWebView::onrenderProcessTerminated(QWebEnginePage::RenderProcessTerminationStatus terminationStatus, int exitCode)
+{
+    qDebug() << "===" <<QTime::currentTime().toString("hh:mm:ss.zzz")<<\
+                "anWebView::onrenderProcessTerminated("<<terminationStatus<<"," << exitCode<<")";
 }
 
 QWebEngineView *anWebView::createWindow(QWebEnginePage::WebWindowType type)
