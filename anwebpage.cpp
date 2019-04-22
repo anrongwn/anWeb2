@@ -72,11 +72,12 @@ QWebEngineProfile *anWebPage::createWebEngineProfile(const QStringList &jslist, 
     path = QString(R"(:/js/anweb2init.js)");
     QFile jsfile2(path);
     if (jsfile2.open(QIODevice::ReadOnly)){
+        jsAll+="\r\n";
         jsAll += jsfile2.readAll().constData();
     }
     jsfile2.close();
 
-    /*//
+    //
     for(auto js:jslist){
         jsAll+="\r\n";
 
@@ -88,22 +89,24 @@ QWebEngineProfile *anWebPage::createWebEngineProfile(const QStringList &jslist, 
         }
         tmp.close();
     }
-    */
 
-    {
-        QWebEngineScript script;
-        script.setSourceCode(jsAll);
-        script.setName("qwebchannel.js");
-        script.setWorldId(QWebEngineScript::MainWorld);
-        script.setInjectionPoint(QWebEngineScript::DocumentCreation);
-        script.setRunsOnSubFrames(false);
-        profile->scripts()->insert(script);
-    }
+    //injected js
+    QWebEngineScript script;
+    script.setSourceCode(jsAll);
+    script.setName("qwebchannel.js");
+    script.setWorldId(QWebEngineScript::MainWorld);
+    script.setInjectionPoint(QWebEngineScript::DocumentCreation);
+    script.setRunsOnSubFrames(true);
+    profile->scripts()->insert(script);
+
+
+    //
+    profile->setCachePath(QString(R"(D:\MyTest\2019_Qt\tmp\)"));
 
     return profile;
 }
 
-QString anWebPage::loadJSrcipt(const QString &fn)
+QString anWebPage::injectedJSrcipt(const QString &fn)
 {
     QString js;//("(function(){\r\n");
     js+="var ohead= document.getElementsByTagName('body')[0];\r\nvar oscript= document.createElement('script');\r\noscript.type= 'text/javascript';\r\n";
@@ -158,7 +161,7 @@ QString anWebPage::loadJSrcipt(const QString &fn)
     return js ;
 }
 
-QString anWebPage::loadJSrcipt2(const QString &fn)
+QString anWebPage::injectedJSrcipt2(const QString &fn)
 {
     QString path(R"(:/js/)");
     path+=fn;
@@ -178,7 +181,7 @@ QString anWebPage::loadJSrcipt2(const QString &fn)
     script.setSourceCode(jsAll);
     script.setName(fn);
     script.setWorldId(QWebEngineScript::MainWorld);
-    script.setInjectionPoint(QWebEngineScript::Deferred);
+    script.setInjectionPoint(QWebEngineScript::DocumentCreation);
     script.setRunsOnSubFrames(true);
     profile()->scripts()->insert(script);
 
@@ -192,13 +195,16 @@ void anWebPage::onloadFinished(bool ok)
 
    qDebug() << "===" <<QTime::currentTime().toString("hh:mm:ss.zzz")<<"anWebPage::onloadFinished("<<ok<<")";
 
-
-   QString js = loadJSrcipt("mainmenu.js");
+   /*
+   QString js = injectedJSrcipt("mainmenu.js");
    syncRunJs(js);
+   */
 
+   //初始化
+   syncRunJs("init();");
 
     /*
-   loadJSrcipt2("mainmenu.js");
+   injectedJSrcipt2("mainmenu.js");
    syncRunJs("init();");
    */
 

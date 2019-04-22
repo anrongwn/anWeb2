@@ -23,8 +23,8 @@ public:
 
     static QWebEngineProfile* createWebEngineProfile(const QStringList& jslist, QObject *parent=nullptr);
 
-    QString loadJSrcipt(const QString &fn);
-    QString loadJSrcipt2(const QString &fn);
+    QString injectedJSrcipt(const QString &fn);
+    QString injectedJSrcipt2(const QString &fn);
 
 signals:
     void jsCompleted();

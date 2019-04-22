@@ -30,4 +30,6 @@ function onquery(){
     context.caller(cmd);
     cmd=null;
 };
+/*
 init();
+*/
