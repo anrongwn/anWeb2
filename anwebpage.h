@@ -30,6 +30,7 @@ signals:
     void jsCompleted();
 
 public slots:
+    void onloadStarted();
     void onloadFinished(bool ok);
     void onrenderProcessTerminated(QWebEnginePage::RenderProcessTerminationStatus terminationStatus, int exitCode);
     virtual void onhandler(const QJsonObject& param);

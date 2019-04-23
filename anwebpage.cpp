@@ -12,6 +12,7 @@ anWebPage::anWebPage(QWebEngineProfile *profile, QObject *parent) : \
 {
     profile->setParent(this);
     QObject::connect(this, &QWebEnginePage::loadFinished, this, &anWebPage::onloadFinished);
+    QObject::connect(this, &QWebEnginePage::loadStarted, this, &anWebPage::onloadStarted);
 }
 
 anWebPage::~anWebPage()
@@ -25,7 +26,7 @@ void anWebPage::registerCommObject(const QString &objId, anJsCommContext *obj)
     channel->registerObject(objId, obj);
     setWebChannel(channel);
 
-    QObject::connect(obj, &anJsCommContext::handler, this, &anWebPage::onhandler);
+    //QObject::connect(obj, &anJsCommContext::handler, this, &anWebPage::onhandler);
 
 }
 
@@ -58,6 +59,7 @@ QVariant anWebPage::syncRunJs(const QString &js)
 
 QWebEngineProfile *anWebPage::createWebEngineProfile(const QStringList &jslist, QObject *parent)
 {
+    //QWebEngineProfile * profile = QWebEngineProfile::defaultProfile();
     QWebEngineProfile * profile = new QWebEngineProfile("anWebProfile", parent);
     QString jsAll;
 
@@ -77,7 +79,7 @@ QWebEngineProfile *anWebPage::createWebEngineProfile(const QStringList &jslist, 
     }
     jsfile2.close();
 
-    //
+    /*//
     for(auto js:jslist){
         jsAll+="\r\n";
 
@@ -89,6 +91,8 @@ QWebEngineProfile *anWebPage::createWebEngineProfile(const QStringList &jslist, 
         }
         tmp.close();
     }
+    */
+
 
     //injected js
     QWebEngineScript script;
@@ -98,7 +102,6 @@ QWebEngineProfile *anWebPage::createWebEngineProfile(const QStringList &jslist, 
     script.setInjectionPoint(QWebEngineScript::DocumentCreation);
     script.setRunsOnSubFrames(true);
     profile->scripts()->insert(script);
-
 
     //
     profile->setCachePath(QString(R"(D:\MyTest\2019_Qt\tmp\)"));
@@ -161,6 +164,7 @@ QString anWebPage::injectedJSrcipt(const QString &fn)
     return js ;
 }
 
+//don't injected!
 QString anWebPage::injectedJSrcipt2(const QString &fn)
 {
     QString path(R"(:/js/)");
@@ -189,12 +193,37 @@ QString anWebPage::injectedJSrcipt2(const QString &fn)
 
 }
 
+void anWebPage::onloadStarted()
+{
+    QWebEngineScriptCollection *jsc = profile()->scripts();
+
+    //qDebug()<<"===anWebPage::onloadStarted() script count="<<jsc->count()<<jsc->findScript(QString("qwebchannel.js"));
+    qDebug()<<"===anWebPage::onloadStarted() script count="<<jsc->count()<<url();
+    QUrl tmp = url();
+    QString str1 = tmp.toLocalFile();
+    str1 = str1.section('/',-1);
+    if (str1=="index.html"){
+        injectedJSrcipt2("mainmenu.js");
+    }
+
+    if(str1=="query.html"){
+        injectedJSrcipt2("query.js");
+    }
+
+    if(str1=="withdrawal.html"){
+        injectedJSrcipt2("withdrawal.js");
+    }
+
+}
+
 void anWebPage::onloadFinished(bool ok)
 {
     Q_UNUSED(ok);
 
    qDebug() << "===" <<QTime::currentTime().toString("hh:mm:ss.zzz")<<"anWebPage::onloadFinished("<<ok<<")";
 
+    QWebEngineScriptCollection *jsc = profile()->scripts();
+   qDebug()<<"===anWebPage::onloadFinished() script count="<<jsc->count()<<url();
    /*
    QString js = injectedJSrcipt("mainmenu.js");
    syncRunJs(js);
@@ -203,11 +232,11 @@ void anWebPage::onloadFinished(bool ok)
    //初始化
    syncRunJs("init();");
 
-    /*
+
+   /*//don't injected !
    injectedJSrcipt2("mainmenu.js");
    syncRunJs("init();");
-   */
-
+    */
 
 }
 

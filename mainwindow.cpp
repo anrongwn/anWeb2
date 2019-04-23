@@ -41,7 +41,7 @@ anWebView *MainWindow::initWebView()
     pWebView_->setAttribute(Qt::WA_DeleteOnClose, true);
     pWebView_->setContextMenuPolicy(Qt::NoContextMenu);
 
-    pWebView_->init();
+    pWebView_->mainpage("index.html", "mainmenu.js");
 
     /*
     QString urlName("D:\\MyTest\\2019_Qt\\anWeb2\\page\\index.html");
