@@ -13,6 +13,8 @@ public:
     explicit anWebView(QWidget *parent = Q_NULLPTR);
     ~anWebView();
 
+    QWebEnginePage* initPage(const QStringList &jslist);
+    void changePage(const QString &pagefile, const QString &jsfile);
     void mainpage(const QString &pagefile, const QString &jsfile);
     void query(const QString &pagefile, const QString &jsfile);
     void withdrawal(const QString &pagefile, const QString &jsfile);

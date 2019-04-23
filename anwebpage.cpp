@@ -198,21 +198,30 @@ void anWebPage::onloadStarted()
     QWebEngineScriptCollection *jsc = profile()->scripts();
 
     //qDebug()<<"===anWebPage::onloadStarted() script count="<<jsc->count()<<jsc->findScript(QString("qwebchannel.js"));
-    qDebug()<<"===anWebPage::onloadStarted() script count="<<jsc->count()<<url();
-    QUrl tmp = url();
-    QString str1 = tmp.toLocalFile();
+    qDebug()<<"==="<<QTime::currentTime().toString("hh:mm:ss.zzz")<<"anWebPage::onloadStarted() script count="<<jsc->count()<<url();
+
+    /*
+    //根据URL，injected 相应的js文件
+    QString str1 = url().toLocalFile();
     str1 = str1.section('/',-1);
     if (str1=="index.html"){
-        injectedJSrcipt2("mainmenu.js");
+        QWebEngineScript sc = jsc->findScript("mainmenu.js");
+        if (sc.isNull())
+            injectedJSrcipt2("mainmenu.js");
     }
 
     if(str1=="query.html"){
-        injectedJSrcipt2("query.js");
+        QWebEngineScript sc = jsc->findScript("query.js");
+        if (sc.isNull())
+            injectedJSrcipt2("query.js");
     }
 
     if(str1=="withdrawal.html"){
-        injectedJSrcipt2("withdrawal.js");
+        QWebEngineScript sc = jsc->findScript("withdrawal.js");
+        if (sc.isNull())
+            injectedJSrcipt2("withdrawal.js");
     }
+    */
 
 }
 
@@ -220,20 +229,37 @@ void anWebPage::onloadFinished(bool ok)
 {
     Q_UNUSED(ok);
 
-   qDebug() << "===" <<QTime::currentTime().toString("hh:mm:ss.zzz")<<"anWebPage::onloadFinished("<<ok<<")";
-
     QWebEngineScriptCollection *jsc = profile()->scripts();
-   qDebug()<<"===anWebPage::onloadFinished() script count="<<jsc->count()<<url();
-   /*
+    qDebug() << "===" <<QTime::currentTime().toString("hh:mm:ss.zzz")<<"anWebPage::onloadFinished("<<ok<<")" << ",script count="<<jsc->count()<<url();;
+
+    /*
    QString js = injectedJSrcipt("mainmenu.js");
    syncRunJs(js);
    */
 
-   //初始化
-   syncRunJs("init();");
+    //根据URL，injected 相应的js文件
+    QString js;
+    QString str1 = url().toLocalFile();
+    str1 = str1.section('/',-1);
+    if (str1=="index.html"){
+        js = injectedJSrcipt("mainmenu.js");
+    }
+
+    if(str1=="query.html"){
+        js = injectedJSrcipt("query.js");
+    }
+
+    if(str1=="withdrawal.html"){
+       js = injectedJSrcipt("withdrawal.js");
+    }
+    syncRunJs(js);
 
 
-   /*//don't injected !
+    //初始化
+    syncRunJs("init();");
+
+
+    /*//don't injected !
    injectedJSrcipt2("mainmenu.js");
    syncRunJs("init();");
     */

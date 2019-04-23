@@ -9,11 +9,37 @@ anWebView::anWebView(QWidget *parent) : QWebEngineView(parent)
     QObject::connect(this, &QWebEngineView::loadFinished, this, &anWebView::onloadFinished);
     QObject::connect(this, &QWebEngineView::renderProcessTerminated, this, &anWebView::onrenderProcessTerminated);
 
+    initPage(QStringList());
+
 }
 
 anWebView::~anWebView()
 {
 
+}
+
+QWebEnginePage *anWebView::initPage(const QStringList &jslist)
+{
+    QWebEngineProfile *profile = anWebPage::createWebEngineProfile(jslist);
+    anWebPage * page = new anWebPage(profile, this);
+    /*
+    anWebPage * page = new anWebPage(profile, nullptr);
+    */
+
+    anJsCommContext * context = new anJsCommContext(qobject_cast<QObject *>(page));
+    QObject::connect(context, &anJsCommContext::handler, this, &anWebView::onhandler);
+    page->registerCommObject("context", context);
+    this->setPage(page);
+
+    return page;
+}
+
+void anWebView::changePage(const QString &pagefile, const QString &jsfile)
+{
+    QString urlName(R"(D:\MyTest\2019_Qt\anWeb2\page\)");
+    urlName+=pagefile;
+    QUrl url = QUrl::fromUserInput(urlName);
+    page()->load(url);
 }
 
 void anWebView::mainpage(const QString &pagefile, const QString &jsfile)
@@ -121,7 +147,13 @@ void anWebView::onhandler(const QJsonObject &param)
     QJsonValue id = param.value(QString("id"));
     QString vl = id.toString();
     //if (vl.compare())
+
+    /*//多webpage
     mainpage(param.value("page").toString(), param.value("js").toString());
+    */
+
+    //单webpage
+    changePage(param.value("page").toString(), param.value("js").toString());
 
 }
 
