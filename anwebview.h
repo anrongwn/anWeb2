@@ -28,6 +28,8 @@ public slots:
 
 protected:
     QWebEngineView * createWindow(QWebEnginePage::WebWindowType type);
+
+    void mouseDoubleClickEvent(QMouseEvent *event) override;
 };
 
 #endif // ANWEBVIEW_H

@@ -28,12 +28,15 @@ public:
 
 signals:
     void jsCompleted();
+protected:
+    bool eventFilter(QObject *watched, QEvent *event) override;
 
 public slots:
     void onloadStarted();
     void onloadFinished(bool ok);
     void onrenderProcessTerminated(QWebEnginePage::RenderProcessTerminationStatus terminationStatus, int exitCode);
     virtual void onhandler(const QJsonObject& param);
+    void triggerAction(QWebEnginePage::WebAction action, bool checked = false) override;
 
 };
 

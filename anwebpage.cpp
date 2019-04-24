@@ -4,12 +4,15 @@
 #include <QWebEngineScript>
 #include <QWebEngineScriptCollection>
 #include <QFile>
+#include <QEvent>
 #include "anjscommcontext.h"
 
 
 anWebPage::anWebPage(QWebEngineProfile *profile, QObject *parent) : \
     QWebEnginePage(profile, parent)
 {
+    //this->installEventFilter(this);
+
     profile->setParent(this);
     QObject::connect(this, &QWebEnginePage::loadFinished, this, &anWebPage::onloadFinished);
     QObject::connect(this, &QWebEnginePage::loadStarted, this, &anWebPage::onloadStarted);
@@ -193,6 +196,16 @@ QString anWebPage::injectedJSrcipt2(const QString &fn)
 
 }
 
+bool anWebPage::eventFilter(QObject *watched, QEvent *event)
+{
+    if (event->type() == QEvent::MouseButtonDblClick){
+        qDebug()<<"==="<< QTime::currentTime().toString("hh:mm:ss.zzz")<<"anWebPage::eventFilter QEvent::MouseButtonDblClick";
+        return true;
+    }
+
+    return QObject::eventFilter(watched, event);
+}
+
 void anWebPage::onloadStarted()
 {
     QWebEngineScriptCollection *jsc = profile()->scripts();
@@ -263,7 +276,6 @@ void anWebPage::onloadFinished(bool ok)
    injectedJSrcipt2("mainmenu.js");
    syncRunJs("init();");
     */
-
 }
 
 void anWebPage::onrenderProcessTerminated(QWebEnginePage::RenderProcessTerminationStatus terminationStatus, int exitCode)
@@ -275,4 +287,9 @@ void anWebPage::onrenderProcessTerminated(QWebEnginePage::RenderProcessTerminati
 void anWebPage::onhandler(const QJsonObject &param)
 {
     qDebug() << "===" <<QTime::currentTime().toString("hh:mm:ss.zzz")<<"anWebPage::onhandler("<<param<<")";
+}
+
+void anWebPage::triggerAction(QWebEnginePage::WebAction action, bool checked)
+{
+    qDebug() << "===" <<QTime::currentTime().toString("hh:mm:ss.zzz")<<"anWebPage::triggerAction("<<action<<","<<checked <<")";
 }

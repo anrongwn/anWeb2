@@ -3,6 +3,8 @@ function init()
 {
     document.getElementById("bn1").onclick=onwithdrawal;
     document.getElementById("bn2").onclick=onquery;
+
+    document.ondblclick=function(){return false;};
 };
 
 function onwithdrawal(){
@@ -30,6 +32,4 @@ function onquery(){
     context.caller(cmd);
     cmd=null;
 };
-/*
-init();
-*/
+

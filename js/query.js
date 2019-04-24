@@ -3,6 +3,8 @@ function init()
     document.getElementById("bn1").onclick=onclear;
     document.getElementById("bn2").onclick=onquery;
     document.getElementById("bn3").onclick=onback;
+
+    document.ondblclick=function(){return false;};
 };
 
 function onclear(){
@@ -26,3 +28,5 @@ function onback(){
     context.caller(cmd);
     cmd=null;
 };
+
+

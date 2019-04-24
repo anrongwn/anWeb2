@@ -3,14 +3,25 @@
 #include "anjscommcontext.h"
 #include <QJsonObject>
 #include <QJsonValue>
+#include <QMouseEvent>
 
 anWebView::anWebView(QWidget *parent) : QWebEngineView(parent)
 {
     QObject::connect(this, &QWebEngineView::loadFinished, this, &anWebView::onloadFinished);
     QObject::connect(this, &QWebEngineView::renderProcessTerminated, this, &anWebView::onrenderProcessTerminated);
 
+    //
+    this->settings()->setAttribute(QWebEngineSettings::ShowScrollBars, false);
+    this->settings()->setAttribute(QWebEngineSettings::PluginsEnabled, true);
+    this->settings()->setAttribute(QWebEngineSettings::FullScreenSupportEnabled, true);
+    this->setAttribute(Qt::WA_DeleteOnClose, true);
+    this->setContextMenuPolicy(Qt::NoContextMenu);
+    //this->setAttribute(Qt::WA_TransparentForMouseEvents, true);
+
+
     initPage(QStringList());
 
+    //this->grabMouse();
 }
 
 anWebView::~anWebView()
@@ -162,4 +173,10 @@ QWebEngineView *anWebView::createWindow(QWebEnginePage::WebWindowType type)
     Q_UNUSED(type);
 
     return this;
+}
+
+void anWebView::mouseDoubleClickEvent(QMouseEvent *event)
+{
+    qDebug() << "===" <<QTime::currentTime().toString("hh:mm:ss.zzz")<<"anWebView::mouseDoubleClickEvent("<<event<<")";
+    event->ignore();
 }
