@@ -2,9 +2,19 @@
 #include <QApplication>
 #include <QTextCodec>
 #include <QDebug>
+#include <array>
+
+template<typename T, std::size_t N>
+constexpr std::size_t arraySize(T (&)[N]) noexcept{
+    return N;
+}
 
 int main(int argc, char *argv[])
 {
+    int na[]={1,3,5,7,9};
+    std::array<int, arraySize(na)> ana={1,3,5,7,9};
+
+    //int *p = nullptr;
     //QTextCodec::setCodecForLocale(QTextCodec::codecForName("GB18030"));
     QTextCodec *localeCodec = QTextCodec::codecForLocale();
     qDebug() << "===LocaleCodec.name = " << localeCodec->name();

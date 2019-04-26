@@ -106,8 +106,8 @@ QWebEngineProfile *anWebPage::createWebEngineProfile(const QStringList &jslist, 
     script.setRunsOnSubFrames(true);
     profile->scripts()->insert(script);
 
-    //
     profile->setCachePath(QString(R"(D:\MyTest\2019_Qt\tmp\)"));
+
 
     return profile;
 }
