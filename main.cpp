@@ -4,6 +4,7 @@
 #include <QDebug>
 #include <array>
 
+/*//通过利用声明数组引用这一能力创造出一个模板，用来推导出数组含有的元素个数*/
 template<typename T, std::size_t N>
 constexpr std::size_t arraySize(T (&)[N]) noexcept{
     return N;
@@ -13,6 +14,9 @@ int main(int argc, char *argv[])
 {
     int na[]={1,3,5,7,9};
     std::array<int, arraySize(na)> ana={1,3,5,7,9};
+    for( auto const& i: ana){
+        qDebug()<<"i=" << i;
+    }
 
     //int *p = nullptr;
     //QTextCodec::setCodecForLocale(QTextCodec::codecForName("GB18030"));
