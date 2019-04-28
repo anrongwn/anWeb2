@@ -56,8 +56,9 @@ QVariant anWebPage::syncRunJs(const QString &js)
 
     qDebug()<<"==="<< QTime::currentTime().toString("hh:mm:ss.zzz")<<" syncRunJs, loop.exec() exit.";
 
-    //c++11 move constructs
-    return std::move(result);
+    //c++11 move constructs OR  c++ RVO(right value optimization)
+    //return std::move(result);
+    return result;
 }
 
 QWebEngineProfile *anWebPage::createWebEngineProfile(const QStringList &jslist, QObject *parent)
