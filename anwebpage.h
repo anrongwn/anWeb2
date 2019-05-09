@@ -31,6 +31,11 @@ signals:
 protected:
     bool eventFilter(QObject *watched, QEvent *event) override;
 
+
+    void javaScriptConsoleMessage(QWebEnginePage::JavaScriptConsoleMessageLevel level, \
+                                          const QString &message, int lineNumber, const QString &sourceID) override;
+
+
 public slots:
     void onloadStarted();
     void onloadFinished(bool ok);

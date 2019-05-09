@@ -207,6 +207,12 @@ bool anWebPage::eventFilter(QObject *watched, QEvent *event)
     return QObject::eventFilter(watched, event);
 }
 
+void anWebPage::javaScriptConsoleMessage(QWebEnginePage::JavaScriptConsoleMessageLevel level, const QString &message, \
+                                         int lineNumber, const QString &sourceID)
+{
+    qDebug()<< "===javaScriptConsoleMessage:"<<sourceID<< " " << lineNumber << ", level="<<level<<", message="<<message;
+}
+
 void anWebPage::onloadStarted()
 {
     QWebEngineScriptCollection *jsc = profile()->scripts();
